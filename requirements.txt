@@ -1,4 +1,6 @@
-pyMupdf
-docx
-sickit-learn
+flask
+flask-cors
 nltk
+python-docx
+PyMuPDF
+scikit-learn
