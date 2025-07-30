@@ -1,16 +1,39 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from resume_parser import extract_text_from_pdf, extract_docx_text
 from job_desc_extract import extract_jd_keywords
 from ats_match_logic import keyword_match_score
+import os
 
+# Corrected paths for template/static folders
 app = Flask(
     __name__,
-    template_folder='../templates',   # points to root-level /templates
-    static_folder='../static'         # points to root-level /static
+    template_folder=os.path.abspath('../templates'),
+    static_folder=os.path.abspath('../static')
 )
 CORS(app)
 
+# ✅ Home page (fixes 404)
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# ✅ About page
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+# ✅ Links page
+@app.route('/links')
+def links():
+    return render_template('links.html')
+
+# ✅ Portfolio page (if added later)
+@app.route('/portfolio')
+def portfolio():
+    return "<h1>Portfolio page coming soon</h1>"
+
+# ✅ Resume + JD analysis route
 @app.route('/analyze', methods=['POST'])
 def analyze():
     try:
@@ -34,8 +57,8 @@ def analyze():
         return jsonify(result)
 
     except Exception as e:
-        print("🔥 BACKEND ERROR:", e)  # 👈 this line will print the real error
+        print("🔥 BACKEND ERROR:", e)
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=8000)
+    app.run(host='0.0.0.0', port=8000)

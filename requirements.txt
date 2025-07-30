@@ -1,6 +1,6 @@
-flask
+Flask
 flask-cors
-nltk
 python-docx
 PyMuPDF
 scikit-learn
+nltk
