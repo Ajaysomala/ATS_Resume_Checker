@@ -5,14 +5,12 @@
     <title>ATS Resume Checker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- CSS -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
+    <!-- ✅ Load CSS via Flask static route -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
+
   <body>
-    <!-- 🌐 Navigation Bar -->
+    <!-- ✅ Navbar -->
     <nav class="navbar">
       <ul>
         <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -22,19 +20,19 @@
       </ul>
     </nav>
 
-    <!-- 📝 Main Section -->
+    <!-- ✅ Main ATS Section -->
     <div class="container">
       <h1>🚀 ATS Resume Checker</h1>
 
       <form id="resumeForm">
         <div class="form-grid">
-          <!-- 📄 Job Description -->
+          <!-- Job Description Input -->
           <div class="form-group">
             <label for="jd">📄 Job Description</label>
             <textarea id="jd" name="jd" rows="12" required></textarea>
           </div>
 
-          <!-- 📤 Upload Resume -->
+          <!-- Resume Upload -->
           <div class="form-group">
             <label for="resume">📤 Upload Resume</label>
             <input
@@ -47,11 +45,11 @@
           </div>
         </div>
 
-        <!-- 🔍 Analyze Button -->
+        <!-- Submit Button -->
         <button type="submit">⚡ Analyze Resume</button>
       </form>
 
-      <!-- 📊 Output Section -->
+      <!-- Results -->
       <div id="result" style="display: none">
         <h2>🎯 Match Score: <span id="score">-</span>%</h2>
 
@@ -68,12 +66,12 @@
       </div>
     </div>
 
-    <!-- 🦾 Footer -->
+    <!-- ✅ Footer -->
     <footer>
       <p>Built with 💙 by Beru V3</p>
     </footer>
 
-    <!-- JS -->
+    <!-- ✅ JS (auto-correct fetch path using relative URL) -->
     <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>

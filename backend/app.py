@@ -29,9 +29,13 @@ def analyze():
         jd_text = request.form.get('jd')
         resume_file = request.files.get('resume')
 
+        print(f"📥 JD: {jd_text[:50]}...")  # first 50 chars
+        print(f"📎 Resume filename: {resume_file.filename}")
+
         if not jd_text or not resume_file:
             return jsonify({"error": "Missing inputs"}), 400
 
+        # File type detection
         if resume_file.filename.endswith('.pdf'):
             resume_text = extract_text_from_pdf(resume_file)
         elif resume_file.filename.endswith('.docx'):
@@ -39,8 +43,12 @@ def analyze():
         else:
             return jsonify({"error": "Unsupported file format"}), 400
 
+        print("📄 Resume extracted successfully")
         jd_keywords = extract_jd_keywords(jd_text)
+        print(f"🔍 Extracted JD keywords: {jd_keywords}")
+
         result = keyword_match_score(jd_keywords, resume_text)
+        print(f"✅ Result: {result}")
 
         return jsonify(result)
 
@@ -49,4 +57,4 @@ def analyze():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(debug=True)
