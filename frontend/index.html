@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ATS Resume Checker</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Links</a></li>
+        <li><a href="#">Portfolio</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>🚀 ATS Resume Checker</h1>
+
+      <form id="resumeForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="jd">📄 Job Description</label>
+            <textarea id="jd" name="jd" rows="12" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="resume">📤 Upload Resume</label>
+            <input
+              type="file"
+              id="resume"
+              name="resume"
+              accept=".pdf,.docx"
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit">⚡ Analyze Resume</button>
+      </form>
+
+      <div id="result">
+        <h2>🎯 Match Score: <span id="score">-</span>%</h2>
+
+        <div class="results-columns">
+          <div class="keyword-block matched">
+            <strong>✅ Matched Keywords</strong>
+            <p id="matched">-</p>
+          </div>
+          <div class="keyword-block unmatched">
+            <strong>❌ Missing Keywords</strong>
+            <p id="unmatched">-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Built with 💙 by Beru V3</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

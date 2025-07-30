@@ -1,0 +1,4 @@
+pyMupdf
+docx
+sickit-learn
+nltk

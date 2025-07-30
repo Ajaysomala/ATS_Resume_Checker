@@ -1,0 +1,146 @@
+/* === NAVIGATION BAR === */
+.navbar {
+  background-color: #161B22;
+  padding: 12px 0;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #30363D;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.navbar li a {
+  text-decoration: none;
+  color: #58A6FF;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+.navbar li a:hover {
+  color: #1F6FEB;
+}
+
+/* === BASE + BODY === */
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #0D1117;
+  color: #C9D1D9;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  background: #161B22;
+  padding: 40px 30px;
+  border-radius: 16px;
+  margin-top: 30px;
+  box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #58A6FF;
+  margin-bottom: 30px;
+}
+
+/* === FORM LAYOUT === */
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+textarea,
+input[type="file"] {
+  padding: 12px;
+  background-color: #0D1117;
+  color: #C9D1D9;
+  border: 1px solid #30363D;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 14px;
+  background-color: #2F81F7;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #1F6FEB;
+}
+
+/* === RESULT SECTION === */
+#result {
+  margin-top: 40px;
+  display: none;
+  background-color: #21262D;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 5px solid #2F81F7;
+}
+
+#score {
+  font-size: 28px;
+  color: #58A6FF;
+}
+
+/* === TWO COLUMNS === */
+.results-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.keyword-block {
+  flex: 1 1 45%;
+  background-color: #161B22;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #30363D;
+  min-height: 100px;
+  font-size: 14px;
+  color: #C9D1D9;
+}
+
+/* === FOOTER === */
+footer {
+  text-align: center;
+  margin-top: 60px;
+  color: #8B949E;
+  font-size: 14px;
+}
+
+/* === MOBILE RESPONSIVE === */
+@media (max-width: 768px) {
+  .form-grid, .results-columns {
+    flex-direction: column;
+  }
+
+  .form-group {
+    flex: 1 1 100%;
+  }
+}
