@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from resume_parser import extract_text_from_pdf, extract_docx_text
-from job_desc_extract import extract_jd_keywords
-from ats_match_logic import keyword_match_score
+from backend.resume_parser import extract_text_from_pdf, extract_docx_text
+from backend.job_desc_extract import extract_jd_keywords
+from backend.ats_match_logic import keyword_match_score
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
