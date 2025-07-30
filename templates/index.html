@@ -3,32 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <title>ATS Resume Checker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
+    <!-- 🌐 Navigation Bar -->
     <nav class="navbar">
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Links</a></li>
-        <li><a href="#">Portfolio</a></li>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('links') }}">Links</a></li>
+        <li><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
       </ul>
     </nav>
 
+    <!-- 📝 Main Section -->
     <div class="container">
       <h1>🚀 ATS Resume Checker</h1>
 
       <form id="resumeForm">
         <div class="form-grid">
+          <!-- 📄 Job Description -->
           <div class="form-group">
             <label for="jd">📄 Job Description</label>
             <textarea id="jd" name="jd" rows="12" required></textarea>
           </div>
 
+          <!-- 📤 Upload Resume -->
           <div class="form-group">
             <label for="resume">📤 Upload Resume</label>
             <input
@@ -41,10 +47,12 @@
           </div>
         </div>
 
+        <!-- 🔍 Analyze Button -->
         <button type="submit">⚡ Analyze Resume</button>
       </form>
 
-      <div id="result">
+      <!-- 📊 Output Section -->
+      <div id="result" style="display: none">
         <h2>🎯 Match Score: <span id="score">-</span>%</h2>
 
         <div class="results-columns">
@@ -60,10 +68,12 @@
       </div>
     </div>
 
+    <!-- 🦾 Footer -->
     <footer>
       <p>Built with 💙 by Beru V3</p>
     </footer>
 
+    <!-- JS -->
     <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>

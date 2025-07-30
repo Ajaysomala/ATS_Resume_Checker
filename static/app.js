@@ -16,7 +16,8 @@ document.getElementById('resumeForm').addEventListener('submit', async function 
   formData.append('resume', resumeFile);
 
   try {
-    const response = await fetch('http://localhost:8000/analyze', {
+    // ✅ CORRECT for live deployment
+    const response = await fetch('/analyze', {
       method: 'POST',
       body: formData
     });
