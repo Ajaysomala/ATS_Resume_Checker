@@ -4,8 +4,12 @@ from resume_parser import extract_text_from_pdf, extract_docx_text
 from job_desc_extract import extract_jd_keywords
 from ats_match_logic import keyword_match_score
 
-app = Flask(__name__)
-CORS(app)  # Allow frontend requests
+app = Flask(
+    __name__,
+    template_folder='../templates',   # points to root-level /templates
+    static_folder='../static'         # points to root-level /static
+)
+CORS(app)
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
