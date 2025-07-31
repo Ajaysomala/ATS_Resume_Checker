@@ -1,10 +1,10 @@
 import sys
 import os
 import traceback
-import nltk
-nltk.download('punkt') 
-nltk.download('punkt')
-nltk.download('wordnet')
+# import nltk
+# nltk.download('punkt') 
+# nltk.download('punkt')
+# nltk.download('wordnet')
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 

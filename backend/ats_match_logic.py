@@ -3,42 +3,24 @@
 import re
 from nltk.stem import PorterStemmer
 from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import wordnet
-
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
 
 ps = PorterStemmer()
 tokenizer = RegexpTokenizer(r'\w+')
 
 def clean_and_stem(text):
     text = text.lower()
-    text = re.sub(r'[^\w\s]', '', text)
+    text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
     tokens = tokenizer.tokenize(text)
     return [ps.stem(token) for token in tokens]
-
-def get_synonyms(word):
-    synonyms = set()
-    for syn in wordnet.synsets(word):
-        for lemma in syn.lemmas():
-            synonyms.add(lemma.name().lower())
-    return synonyms
 
 def keyword_match_score(jd_keywords, resume_text):
     resume_tokens = clean_and_stem(resume_text)
     jd_tokens = clean_and_stem(" ".join(jd_keywords))
 
-    matched = []
-    unmatched = []
-
-    for token in jd_tokens:
-        if token in resume_tokens:
-            matched.append(token)
-        else:
-            synonyms = get_synonyms(token)
-            if any(syn in resume_tokens for syn in synonyms):
-                matched.append(token + "*")  # partial match via synonym
-            else:
-                unmatched.append(token)
-
+    matched = list(set(jd_tokens) & set(resume_tokens))
+    unmatched = list(set(jd_tokens) - set(resume_tokens))
     match_score = round((len(matched) / len(jd_tokens)) * 100, 2) if jd_tokens else 0.0
 
     return {
@@ -46,7 +28,6 @@ def keyword_match_score(jd_keywords, resume_text):
         "matched_keywords": matched,
         "unmatched_keywords": unmatched
     }
-
 
 # ats_weighted_score.py
 
@@ -63,15 +44,9 @@ SECTION_WEIGHTS = {
 def clean_and_stem(text):
     text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)
-    tokens = tokenizer.tokenize(text)
+    # ✅ Fixes punkt_tab error:
+    tokens = word_tokenize(text, preserve_line=True)
     return [ps.stem(token) for token in tokens]
-
-def get_synonyms(word):
-    synonyms = set()
-    for syn in wordnet.synsets(word):
-        for lemma in syn.lemmas():
-            synonyms.add(lemma.name().lower())
-    return synonyms
 
 def split_resume_sections(resume_text):
     sections = {
@@ -85,16 +60,15 @@ def split_resume_sections(resume_text):
     current_section = None
     for line in resume_text.split("\n"):
         line = line.strip().lower()
-
-        if re.search(r'\bsummary\b', line):
+        if "summary" in line:
             current_section = "summary"
-        elif re.search(r'\b(experience|internship)\b', line):
+        elif any(word in line for word in ["experience", "internship"]):
             current_section = "experience"
-        elif re.search(r'\bprojects?\b', line):
+        elif "project" in line:
             current_section = "projects"
-        elif re.search(r'\bskills?\b', line):
+        elif "skill" in line:
             current_section = "skills"
-        elif re.search(r'\beducation\b', line):
+        elif "education" in line:
             current_section = "education"
 
         if current_section:
@@ -107,25 +81,17 @@ def weighted_keyword_score(jd_keywords, resume_text):
     jd_tokens = clean_and_stem(" ".join(jd_keywords))
 
     matched_total = 0
-    total_weighted_keywords = 0
+    unmatched_tokens = []
     match_details = {}
+
+    total_weighted_keywords = 0
 
     for section, text in resume_sections.items():
         section_tokens = clean_and_stem(text)
         weight = SECTION_WEIGHTS.get(section, 1.0)
 
-        matched = []
-        unmatched = []
-
-        for token in jd_tokens:
-            if token in section_tokens:
-                matched.append(token)
-            else:
-                synonyms = get_synonyms(token)
-                if set(synonyms) & set(section_tokens):
-                    matched.append(token + "*")  # synonym match
-                else:
-                    unmatched.append(token)
+        matched = list(set(jd_tokens) & set(section_tokens))
+        unmatched = list(set(jd_tokens) - set(section_tokens))
 
         match_details[section] = {
             "matched": matched,
@@ -142,4 +108,5 @@ def weighted_keyword_score(jd_keywords, resume_text):
         "match_score": score,
         "details": match_details,
         "total_keywords": len(jd_tokens)
-    }
+    } 
+
