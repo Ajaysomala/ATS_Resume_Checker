@@ -1,5 +1,7 @@
 import sys
 import os
+import traceback
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask, request, jsonify, render_template
@@ -39,13 +41,13 @@ def analyze():
         jd_text = request.form.get('jd')
         resume_file = request.files.get('resume')
 
-        print(f"📥 JD: {jd_text[:50]}...")  # first 50 chars
+        print(f"📥 JD: {jd_text[:50]}...")
         print(f"📎 Resume filename: {resume_file.filename}")
 
         if not jd_text or not resume_file:
             return jsonify({"error": "Missing inputs"}), 400
 
-        # File type detection
+        # Resume extraction
         if resume_file.filename.endswith('.pdf'):
             resume_text = extract_text_from_pdf(resume_file)
         elif resume_file.filename.endswith('.docx'):
@@ -53,18 +55,16 @@ def analyze():
         else:
             return jsonify({"error": "Unsupported file format"}), 400
 
-        print("📄 Resume extracted successfully")
+        print("✅ Resume text extracted")
         jd_keywords = extract_jd_keywords(jd_text)
-        print(f"🔍 Extracted JD keywords: {jd_keywords}")
+        print(f"🔑 Extracted JD keywords: {jd_keywords}")
 
         result = keyword_match_score(jd_keywords, resume_text)
-        print(f"✅ Result: {result}")
+        print(f"🎯 Match Result: {result}")
 
         return jsonify(result)
 
     except Exception as e:
         print("🔥 BACKEND ERROR:", e)
+        traceback.print_exc()  # 👈 logs full stack trace to terminal
         return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
