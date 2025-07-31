@@ -1,6 +1,10 @@
 # ats_match_logic.py
 
 import re
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+
 from nltk.stem import PorterStemmer
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import PorterStemmer
