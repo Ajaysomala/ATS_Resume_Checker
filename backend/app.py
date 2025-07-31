@@ -1,6 +1,8 @@
 import sys
 import os
 import traceback
+import nltk
+nltk.download('punkt') 
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
