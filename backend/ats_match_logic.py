@@ -3,6 +3,8 @@
 import re
 from nltk.stem import PorterStemmer
 from nltk.tokenize import RegexpTokenizer
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
 
 ps = PorterStemmer()
 tokenizer = RegexpTokenizer(r'\w+')
@@ -29,14 +31,6 @@ def keyword_match_score(jd_keywords, resume_text):
 
 # ats_weighted_score.py
 
-import re
-import nltk
-from nltk.stem import PorterStemmer
-import nltk
-nltk.download('punkt')  # Already there
-nltk.data.find('tokenizers/punkt')  # Force check, raises error if missing
-from nltk.tokenize import word_tokenize
-
 ps = PorterStemmer()
 
 SECTION_WEIGHTS = {
@@ -50,7 +44,8 @@ SECTION_WEIGHTS = {
 def clean_and_stem(text):
     text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)
-    tokens = word_tokenize(text)
+    # ✅ Fixes punkt_tab error:
+    tokens = word_tokenize(text, preserve_line=True)
     return [ps.stem(token) for token in tokens]
 
 def split_resume_sections(resume_text):
@@ -65,7 +60,7 @@ def split_resume_sections(resume_text):
     current_section = None
     for line in resume_text.split("\n"):
         line = line.strip().lower()
-        if any(word in line for word in ["summary"]):
+        if "summary" in line:
             current_section = "summary"
         elif any(word in line for word in ["experience", "internship"]):
             current_section = "experience"
