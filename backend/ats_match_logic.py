@@ -5,6 +5,8 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet
+
 
 ps = PorterStemmer()
 tokenizer = RegexpTokenizer(r'\w+')
@@ -15,9 +17,29 @@ def clean_and_stem(text):
     tokens = tokenizer.tokenize(text)
     return [ps.stem(token) for token in tokens]
 
+def get_synonyms(word):
+    synonyms = set()
+    for syn in wordnet.synsets(word):
+        for lemma in syn.lemmas():
+            synonyms.add(lemma.name().lower())
+    return synonyms
+
 def keyword_match_score(jd_keywords, resume_text):
     resume_tokens = clean_and_stem(resume_text)
     jd_tokens = clean_and_stem(" ".join(jd_keywords))
+
+    matched = []
+    unmatched = []
+
+    for token in jd_tokens:
+        if token in resume_tokens:
+            matched.append(token)
+        else:
+            synonyms = get_synonyms(token)
+            if any(syn in resume_tokens for syn in synonyms):
+                matched.append(token + "*")  # partial match via synonym
+            else:
+                unmatched.append(token)
 
     matched = list(set(jd_tokens) & set(resume_tokens))
     unmatched = list(set(jd_tokens) - set(resume_tokens))
@@ -48,6 +70,13 @@ def clean_and_stem(text):
     tokens = word_tokenize(text, preserve_line=True)
     return [ps.stem(token) for token in tokens]
 
+def get_synonyms(word):
+    synonyms = set()
+    for syn in wordnet.synsets(word):
+        for lemma in syn.lemmas():
+            synonyms.add(lemma.name().lower())
+    return synonyms
+
 def split_resume_sections(resume_text):
     sections = {
         "summary": "",
@@ -60,15 +89,16 @@ def split_resume_sections(resume_text):
     current_section = None
     for line in resume_text.split("\n"):
         line = line.strip().lower()
-        if "summary" in line:
+
+        if re.search(r'\bsummary\b', line):
             current_section = "summary"
-        elif any(word in line for word in ["experience", "internship"]):
+        elif re.search(r'\b(experience|internship)\b', line):
             current_section = "experience"
-        elif "project" in line:
+        elif re.search(r'\bprojects?\b', line):
             current_section = "projects"
-        elif "skill" in line:
+        elif re.search(r'\bskills?\b', line):
             current_section = "skills"
-        elif "education" in line:
+        elif re.search(r'\beducation\b', line):
             current_section = "education"
 
         if current_section:
@@ -81,7 +111,7 @@ def weighted_keyword_score(jd_keywords, resume_text):
     jd_tokens = clean_and_stem(" ".join(jd_keywords))
 
     matched_total = 0
-    unmatched_tokens = []
+    total_weighted_keywords = 0
     match_details = {}
 
     total_weighted_keywords = 0
@@ -92,6 +122,16 @@ def weighted_keyword_score(jd_keywords, resume_text):
 
         matched = list(set(jd_tokens) & set(section_tokens))
         unmatched = list(set(jd_tokens) - set(section_tokens))
+
+        for token in jd_tokens:
+            if token in section_tokens:
+                matched.append(token)
+            else:
+                synonyms = get_synonyms(token)
+                if set(synonyms) & set(section_tokens):
+                    matched.append(token + "*")  # synonym match
+                else:
+                    unmatched.append(token)
 
         match_details[section] = {
             "matched": matched,
