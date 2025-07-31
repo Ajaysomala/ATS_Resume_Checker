@@ -4,7 +4,7 @@ import re
 from nltk.stem import PorterStemmer
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import wordnet
-from nltk.tokenize import word_tokenize
+
 
 ps = PorterStemmer()
 tokenizer = RegexpTokenizer(r'\w+')
@@ -63,8 +63,8 @@ SECTION_WEIGHTS = {
 def clean_and_stem(text):
     text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)
-    tokens = word_tokenize(text)
-    return [ps.stem(token) for token in tokens if token.isalnum()]
+    tokens = tokenizer.tokenize(text)
+    return [ps.stem(token) for token in tokens]
 
 def get_synonyms(word):
     synonyms = set()
